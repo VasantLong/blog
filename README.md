@@ -32,21 +32,80 @@ scripts/update-theme.sh  换主题版本
 .github/workflows/pages.yml  构建 + 部署
 ```
 
-## 日常写作
+## 日常写作（发一篇的完整路径）
+
+Hugo 已装在 `~/.local/bin/hugo`（v0.168.0 extended，PATH 里可直接用）；CI 用的是同一个版本号。
+
+### 1. 建稿
 
 ```bash
-hugo new content posts/my-post/index.md   # 生成 posts/my-post/index.md（draft: true）
-# 写正文 → draft 改 false → 提交推送 main → Actions 自动部署
+cd ~/projects/blog
+scripts/new-post.sh my-slug "文章标题" "标签1,标签2"   # slug 决定 URL: /posts/my-slug/
+# 等价手动方式：hugo new content posts/my-slug/index.md
 ```
 
-本地预览（需 hugo **extended** ≥ 0.162；本机二进制在 `~/tmp/hugo/hugo`，不进仓库）：
+生成的是 `content/posts/<slug>/index.md`，`draft: true`（**草稿不会被构建、不会被部署**）。
+
+### 2. 写 + 预览
 
 ```bash
-HUGO=~/tmp/hugo/hugo scripts/dev.sh          # http://127.0.0.1:1313
-# 或 docker: docker run --rm -it -p 1313:1313 -v "$PWD":/src -w /src klakegg/hugo:ext server -D
+hugo server -D                 # http://127.0.0.1:1313，-D 让草稿也显示
 ```
 
-数学公式：页面里加 `{{</* katex */>}}` 短代码才会加载 KaTeX（否则 `$...$` 保持原文）。
+常用 front matter：
+
+| 字段 | 作用 |
+|---|---|
+| `title` / `date` | 标题、发布日（`date` 在未来且 `buildFuture=false` 时**不会构建**，等于定时发布） |
+| `tags` | 自动生成 `/tags/<tag>/` 归档页 |
+| `summary` | 列表页摘要；不填则截取正文 |
+| `draft` | `true` = 草稿 |
+| `showTableOfContents` | 是否显示目录 |
+| `cover` / `images` | 特色图（写在 front matter，图片放同目录） |
+
+图片用 **page bundle**：放在 `content/posts/<slug>/` 里，正文写 `![说明](photo.png)`（同目录相对路径，构建时自动处理）。
+
+数学公式要加短代码才会加载 KaTeX：
+
+```markdown
+{{</* katex */>}}
+行内 $E=mc^2$，块级 $$\int_0^1 x^2 dx$$
+```
+
+### 3. 发布
+
+```bash
+# 1) 把 draft 改 false
+hugo --minify --gc --cleanDestinationDir   # 本地先构建一遍，确认没报错
+bash scripts/security-check.sh              # 顺手跑不变量自检
+
+# 2) 提交（commit 格式：type(scope): English (中文关键词)）
+git add -A && git commit -m "post(blog): add my-slug (新文章标题)"
+git push origin main
+```
+
+> `--cleanDestinationDir` 别省：删掉或改名文章后，不加它 `public/` 里会留**僵尸页**（本地预览会看到已删的文章）。CI 是全新 checkout，不受影响。
+
+### 4. 验证（3 条都过才算发完）
+
+```bash
+# a) Actions 两个 workflow 都绿（Deploy + Security checks）
+curl -s "https://api.github.com/repos/VasantLong/blog/actions/runs?per_page=4" \
+  | jq -r '.workflow_runs[] | "\(.name): \(.status)/\(.conclusion)"'
+
+# b) 本地不变量自检
+bash scripts/security-check.sh
+
+# c) 线上真的能打开（CDN 生效通常几秒）
+curl -s -o /dev/null -w '%{http_code}\n' https://vasantlong.de5.net/posts/my-slug/
+```
+
+### 5. 直接推 `main` 合规吗？
+
+合规。分支保护只禁 **force-push / 删除分支**，不禁正常推送——单人博客不值得为每篇文章走 PR。
+
+> 定时 `Security checks` 在仓库连续 **60 天无活动**后会被 GitHub 自动停用；正常写文章就够保持活跃，长期不写记得手动 `workflow_dispatch` 唤醒一次。
+
 
 ## 首次上线的完整流程（留档，换域名时复用）
 
