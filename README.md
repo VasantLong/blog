@@ -16,7 +16,9 @@ registrar/DNSHE  zone de5.net  (a/b.ns.dnshe.org)      ← de5.net 整域权威�
 
 - **站点内容/记录相关改动去 CF**：`vasantlong.de5.net` 这个 zone（灰云，不要开橙云——橙云会让 Pages 证书签发失败，且多一次可能被污染的边缘解析）
 - **委派本身要改才去 DNSHE**：那 2 条 NS 记录
-- 关于 `lexigraph.de5.net`：CF 里另有一个它的子域 zone（旧 wordnet 站），与本博客无关
+- `lexigraph.de5.net`：CF 里另有一个它的子域 zone（旧 wordnet 站），与本博客无关；若不再恢复 wordnet，建议把它的 A 记录/zone 清掉，避免指着一台已释放的机器
+- **`de5.net` 是 DNSHE 的免费子域服务**：整域不归我们所有，名下只有 `vasantlong` 与 `lexigraph` 两个名字。因此下面这些**都改不了**：父域 `_dmarc.de5.net`、父域 CAA、父域 DNSSEC(DS)。
+- 免费子域服务的区里还能看到别人的名字（`www`/`test`/`dev`/`admin`/`cdn` 分别委派到不同的 CF zone，`blog` 指向一台已失联的腾讯云 IP）——**都不是我们的，无需处理**，也别把它们当成自己的资产。
 
 ## 结构
 
@@ -102,11 +104,14 @@ GitHub Pages **不下发自定义响应头** → 没有 HSTS / CSP / X-Content-T
 
 **账号/DNS 侧待办**（不在本仓，见 `~/projects/vps/TODO.md`）
 
-- GitHub 2FA 确认已开（API 用 repo scope token 看不到该字段，只能本人核）
-- 一次性 PAT `pi-blog-once` 用后立即吊销
-- `_dmarc.de5.net` 未设 → 建议 `v=DMARC1; p=reject; sp=reject`（配合已有 SPF `-all`）防伪造发信
-- 陈旧记录清理：`blog.de5.net`（A 43.153.67.166，已失联 → 子域接管风险）、`www.de5.net`（CF 520 源站死）、`test.de5.net`（仍 200，确认是否还需要）、`lexigraph.de5.net`（wordnet 已下线）
-- DNSSEC 未启用（父区无 DS、zone 无 RRSIG）：配错即域名解析失败，暂缓，等有明确需求再做
+- [x] GitHub 2FA（本人已确认开启）
+- [x] 一次性 PAT `pi-blog-once` 已吊销、文件已 trash
+- [x] `minihub-pi` SSH key 已带口令；`minihub-vps-ops`（root@wg-vps 那把）已补口令并在 agent 中重新加载
+- [ ] `lexigraph.de5.net` 若不再恢复：清掉 CF zone 的记录/zone，别指向已释放的机器
+- ~~`_dmarc.de5.net`~~ **作废**：父域在服务商手里，我们只能管 `vasantlong.de5.net` 这个名字
+- ~~DNSSEC~~ **作废**：父域不给我们放 DS，子域开 DNSSEC 无法形成信任链
+- 共享父域带来的固有风险（记录在案，不可修）：同区其他用户的名字与本站在同一父域下，无法影响彼此的 cookie/声誉；本站不设 cookie、无表单，因此无跨子域数据暴露面
+
 
 
 ## 取舍记录
