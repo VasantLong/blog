@@ -1,0 +1,20 @@
+# 站点主配置 —— 与主题无关的部分
+# 主题文档: https://blowfish.page/docs/getting-started/
+baseURL = "https://vasantlong.de5.net/"
+title = "Vasant Long"
+theme = "blowfish"
+
+locale = "zh-cn"
+defaultContentLanguage = "zh-cn"
+
+enableRobotsTXT = true
+hasCJKLanguage = true
+summaryLength = 30
+enableEmoji = true
+
+[pagination]
+  pagerSize = 10
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"

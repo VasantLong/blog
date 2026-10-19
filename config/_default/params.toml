@@ -1,0 +1,60 @@
+# 主题参数 —— 改这块就是改外观/行为
+colorScheme = "blowfish"
+defaultAppearance = "dark"
+autoSwitchAppearance = true
+
+enableSearch = true
+enableCodeCopy = true
+
+mainSections = ["posts"]
+
+[header]
+  layout = "basic"
+
+[footer]
+  showMenu = true
+  showCopyright = true
+  showAppearanceSwitcher = true
+  showScrollToTop = true
+
+[homepage]
+  layout = "profile"
+  showRecent = true
+  showRecentItems = 5
+  showMoreLink = true
+  showMoreLinkDest = "posts"
+
+[article]
+  showDate = true
+  showAuthor = true
+  showReadingTime = true
+  showWordCount = true
+  showTableOfContents = true
+  showBreadcrumbs = true
+  showEdit = true
+  editURL = "https://github.com/VasantLong/blog/edit/main/content"
+  editAppendPath = true
+  showPagination = true
+  showRelatedContent = true
+  relatedContentLimit = 6
+  # 不接 Firebase，避免页面里挂外部请求（国内首屏考虑）
+  showViews = false
+  showLikes = false
+  sharingLinks = ["telegram"]
+
+[list]
+  showHero = false
+  groupByYear = true
+  showSummary = true
+  showViews = false
+  showLikes = false
+  cardView = true
+  orderByWeight = false
+
+[taxonomy]
+  showTermCount = true
+  showHero = false
+
+[term]
+  groupByYear = true
+  showHero = false
