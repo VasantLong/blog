@@ -95,6 +95,8 @@ git diff --stat themes/blowfish | tail -3
 - Actions 全部钉 commit SHA（不再是可变 tag `@v4/@v5`）
 - Actions 默认 `GITHUB_TOKEN` 权限 = read-only；workflow 自身最小权限（`contents: read` + `pages: write` + `id-token: write`）
 - secret scanning + push protection（公开仓默认开启）
+- 仓库 Issues 已关闭（公开仓任何人可提交，少一个垃圾/社工入口）
+- Dependabot alerts + security updates 已开启（无 npm 依赖，主要盯 actions 版本）
 - 站点**零第三方运行时资源**：无 CDN、无外部字体、无统计、无表单提交、无 cookie；本地资源全部带 `integrity`
 
 **结构性限制（改不了，记录在案）**
