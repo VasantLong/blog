@@ -84,6 +84,31 @@ scripts/update-theme.sh v3.10.0        # 下载 → 裁剪 → 替换 themes/blo
 git diff --stat themes/blowfish | tail -3
 ```
 
+## 安全基线（2026-10-19 审查）
+
+**已开**
+
+- HTTPS 强制（Enforce HTTPS）+ Let's Encrypt 证书；`http → https` 301
+- `main` 分支保护：禁 force-push、禁删除，**admin 同样受限**（enforce_admins=true）
+- Actions 全部钉 commit SHA（不再是可变 tag `@v4/@v5`）
+- Actions 默认 `GITHUB_TOKEN` 权限 = read-only；workflow 自身最小权限（`contents: read` + `pages: write` + `id-token: write`）
+- secret scanning + push protection（公开仓默认开启）
+- 站点**零第三方运行时资源**：无 CDN、无外部字体、无统计、无表单提交、无 cookie；本地资源全部带 `integrity`
+
+**结构性限制（改不了，记录在案）**
+
+GitHub Pages **不下发自定义响应头** → 没有 HSTS / CSP / X-Content-Type-Options / Referrer-Policy。
+要安全头只能二选一：① 换 Cloudflare Pages（支持 `_headers` 文件）；② 经 CF 代理注入 —— **不可取**，橙云会让 Pages 自定义域名校验与证书签发失败，且 CF 边缘在国内实测半通。
+
+**账号/DNS 侧待办**（不在本仓，见 `~/projects/vps/TODO.md`）
+
+- GitHub 2FA 确认已开（API 用 repo scope token 看不到该字段，只能本人核）
+- 一次性 PAT `pi-blog-once` 用后立即吊销
+- `_dmarc.de5.net` 未设 → 建议 `v=DMARC1; p=reject; sp=reject`（配合已有 SPF `-all`）防伪造发信
+- 陈旧记录清理：`blog.de5.net`（A 43.153.67.166，已失联 → 子域接管风险）、`www.de5.net`（CF 520 源站死）、`test.de5.net`（仍 200，确认是否还需要）、`lexigraph.de5.net`（wordnet 已下线）
+- DNSSEC 未启用（父区无 DS、zone 无 RRSIG）：配错即域名解析失败，暂缓，等有明确需求再做
+
+
 ## 取舍记录
 
 - **DNS 走子域委派而不是 DNSHE 直连 A 记录**：`de5.net` 整域在 DNSHE，但 DNS 希望在 Cloudflare 统一管（与旧 `lexigraph` 一致）。代价：多一层 NS 委派 + 多一个 CF zone 维护。收益：以后加记录/换目标都在 CF 一个界面。
