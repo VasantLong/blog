@@ -1,7 +1,22 @@
 # blog
 
-个人博客：**Hugo + Blowfish** → 构建产物由 **GitHub Actions** 推 **GitHub Pages** → 域名
-**<https://vasantlong.de5.net>**（DNS 在 DNSHE，A 记录直指 Pages IP，无 CDN/代理）。
+个人博客：**Hugo + Blowfish** → **GitHub Actions** 构建 → **GitHub Pages** → 域名 **<https://vasantlong.de5.net>**
+
+状态（2026-10-19）：已上线。Actions run #1 build/deploy 双绿，证书 `CN=vasantlong.de5.net`（Let's Encrypt，至 2027-01-17），`http → https` 301，Enforce HTTPS 已开。
+
+## DNS 拓扑（改之前先看懂这张图）
+
+```
+registrar/DNSHE  zone de5.net  (a/b.ns.dnshe.org)      ← de5.net 整域权威在这里
+  └─ NS 委派: vasantlong.de5.net → ian/tina.ns.cloudflare.com
+       └─ CF zone vasantlong.de5.net                   ← 这个子域的记录都在 CF 里改
+            └─ A @ → 185.199.108.153 / .109 / .110 / .111   （Proxy = DNS only 灰云！）
+                 └─ GitHub Pages（构建产物 = .github/workflows/pages.yml 产出的 public/）
+```
+
+- **站点内容/记录相关改动去 CF**：`vasantlong.de5.net` 这个 zone（灰云，不要开橙云——橙云会让 Pages 证书签发失败，且多一次可能被污染的边缘解析）
+- **委派本身要改才去 DNSHE**：那 2 条 NS 记录
+- 关于 `lexigraph.de5.net`：CF 里另有一个它的子域 zone（旧 wordnet 站），与本博客无关
 
 ## 结构
 
@@ -31,29 +46,35 @@ HUGO=~/tmp/hugo/hugo scripts/dev.sh          # http://127.0.0.1:1313
 
 数学公式：页面里加 `{{</* katex */>}}` 短代码才会加载 KaTeX（否则 `$...$` 保持原文）。
 
-## 上线 runbook（一次性，按顺序执行）
+## 首次上线的完整流程（留档，换域名时复用）
 
-| # | 执行位置 | 动作 | 完成判据 |
+| # | 执行位置 | 动作 | 判据 |
 |---|---|---|---|
-| 1 | 浏览器 | <https://github.com/new> 建空仓 `VasantLong/blog`，**Public**，不勾 README/gitignore/license | 仓库页显示 quick setup |
-| 2 | 本机 | `git remote add origin git@github.com:VasantLong/blog.git && git push -u origin main` | push 无报错 |
-| 3 | 浏览器 | 仓库 → **Settings → Pages → Build and deployment → Source = GitHub Actions** | Source 显示 GitHub Actions |
-| 4 | 浏览器 | 仓库 → **Actions** 看首次 “Deploy Hugo site to Pages” | build + deploy 两步 ✅，环境给出 `*.github.io` 临时地址可访问 |
-| 5 | DNSHE 控制台 | 给 `de5.net` 加 **4 条 A 记录**：主机记录 `vasantlong`，值 `185.199.108.153` / `185.199.109.153` / `185.199.110.153` / `185.199.111.153`，TTL 默认。**不要加 CNAME**，不要加 AAAA | `dig +short vasantlong.de5.net A` 返回这 4 个 IP |
-| 6 | 浏览器 | 仓库 → Settings → Pages → **Custom domain** 填 `vasantlong.de5.net` → Save | DNS check 变绿 |
-| 7 | 浏览器 | 同页勾 **Enforce HTTPS**（证书签发通常 5–15 分钟，期间勾选框可能灰） | 勾选成功且 https 无证书告警 |
+| 1 | 浏览器 | `github.com/new` 建仓 `VasantLong/blog`（Public，三项初始化都不勾） | 仓库有 quick setup 页 |
+| 2 | 本机 | `git remote add origin git@github.com:VasantLong/blog.git && git push -u origin main` | push 成功 |
+| 3 | API/浏览器 | 开 Pages：`POST /repos/{o}/{r}/pages` body `{"build_type":"workflow"}` | 返回 201，`build_type=workflow` |
+| 4 | — | 等 Actions 首跑；失败看 `GET /repos/{o}/{r}/actions/runs` | build + deploy 都 success |
+| 5 | CF | 子域 zone `vasantlong.de5.net` 加 4 条 A（Name `@`，灰云） | `dig +short vasantlong.de5.net A` 出 4 个 IP |
+| 6 | API | **先** `PUT /repos/{o}/{r}/pages` body `{"cname":"vasantlong.de5.net"}` | 204 |
+| 7 | API | 轮询 `pages.https_certificate.state` 到 `approved`，**再** `PUT` body `{"https_enforced":true}` | 204，`https_enforced=true` |
 
-## 验收（本机执行）
+> **坑**：第 6 步不要同时塞 `https_enforced: true`，否则报 404 `The certificate does not exist yet`（cert 还没签，API 拒绝）。必须 cname → cert approved → enforce 三步走。
+
+## 验收（可随时重跑）
 
 ```bash
-dig +short vasantlong.de5.net A                    # 期望: 185.199.108.153 …111.153 四条
-dig +short de5.net CAA; dig +short vasantlong.de5.net CAA   # 期望: 都为空（无 CAA 即不限制 Let's Encrypt）
-curl -sI https://vasantlong.de5.net | head -3      # 期望: HTTP/2 200
-curl -s https://vasantlong.de5.net | grep -o '<title>[^<]*</title>'   # 期望: <title>Vasant Long</title>
-curl -sI https://vasantlong.de5.net/posts/hello-world/ | head -1      # 期望: 200
+dig +short vasantlong.de5.net A          # 4 个 185.199.x.153
+dig +short vasantlong.de5.net CAA; dig +short de5.net CAA    # 均为空 → 不限制 Let's Encrypt
+curl -sI https://vasantlong.de5.net | head -3                # HTTP/2 200
+curl -s https://vasantlong.de5.net | grep -o '<title>[^<]*</title>'   # <title>Vasant Long</title>
+for p in / /about/ /tags/ /posts/hello-world/ /sitemap.xml /robots.txt; do
+  printf '%-20s %s\n' "$p" "$(curl -s -o /dev/null -w '%{http_code}' https://vasantlong.de5.net$p)"
+done
+curl -s -o /dev/null -w '%{http_code}\n' https://vasantlong.de5.net/no-such-page/   # 404
+openssl s_client -connect vasantlong.de5.net:443 -servername vasantlong.de5.net </dev/null 2>/dev/null | openssl x509 -noout -subject -dates
 ```
 
-再在移动网络 / 无代理浏览器各开一次，确认首屏（目标是不走代理也能看）。
+2026-10-19 实测：首页 200 / total 0.52s（TLS 建连 0.42s）、CSS 200（131KB）、文章页表格与 KaTeX 正常。
 
 ## 主题更新
 
@@ -65,7 +86,8 @@ git diff --stat themes/blowfish | tail -3
 
 ## 取舍记录
 
-- **主题 vendored 而非 submodule**：`github.com` 的 git clone 在当前链路实测 134s 仍超时，但 `codeload.github.com` 下载打包稳定可用；vendored 后 CI 不需要 `submodules: true`，也不受上游 retag 影响。代价：约 12MB 主题进仓库，升级走脚本。
-- **不加 Cloudflare**：`lexigraph.de5.net` 曾整子域委派到 CF；本站在 CF 边缘实测半通，且多一次可能被污染的解析，因此 A 记录直指 Pages IP。
+- **DNS 走子域委派而不是 DNSHE 直连 A 记录**：`de5.net` 整域在 DNSHE，但 DNS 希望在 Cloudflare 统一管（与旧 `lexigraph` 一致）。代价：多一层 NS 委派 + 多一个 CF zone 维护。收益：以后加记录/换目标都在 CF 一个界面。
+- **灰云（DNS only）不是可选项而是硬要求**：橙云时 Pages 的 Let's Encrypt 校验会失败，且 CF 边缘在国内实测半通。
+- **主题 vendored 而非 submodule**：本机到 `github.com:443` 实测持续不通（git clone 134s 超时），但 `codeload.github.com` 可下载打包；vendored 后 CI 不需要 `submodules: true`，也不受上游 retag 影响。代价：约 12MB 主题进仓库，升级走脚本。
 - **关掉 Firebase views/likes**：避免页面挂外部请求，首屏更干净。
 - **单语（zh-cn）**：加双语只需新增 `config/_default/languages.en.toml` + `menus.en.toml` 并落定 `defaultContentLanguage`。
