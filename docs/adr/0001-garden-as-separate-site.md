@@ -14,3 +14,7 @@
 - 两条 CI、两套前端、两种内容模型（post bundle vs 扁平 vault）要各自维护。
 - 花园的内容必须落在 GitHub 可达的仓里：GitHub Actions 摸不到 Gitea / minihub，所以任何"从知识库直出"的方案都得先解决单向导出。
 - 中文全文搜索在 Quartz 默认配置下只能做词首前缀命中（FlexSearch `tokenize: "forward"`），属于已知降级而非缺陷。
+
+## 落地
+
+规格、票据与实现见 [VasantLong/notes](https://github.com/VasantLong/notes)（规格在 `.scratch/garden-site/spec.md`）。本仓只保留两站分工的术语（`CONTEXT.md`）与这两条 ADR，不再承载花园的内容或代码。
