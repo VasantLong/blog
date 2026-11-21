@@ -14,6 +14,7 @@ registrar/DNSHE  zone de5.net  (a/b.ns.dnshe.org)      ← de5.net 整域权威�
                  └─ GitHub Pages（构建产物 = .github/workflows/pages.yml 产出的 public/）
 ```
 
+- **菜单里唯一的外部入口是「花园」**（`config/_default/menus.zh-cn.toml`，`url = https://notes.vasantlong.de5.net`）：Blowfish 对 `http(s)` 开头的 `url` 自动加 `target="_blank"`，桌面与手机菜单都生效，主题不用改；两站分工与"花园不引用博客"的例外见 `CONTEXT.md`
 - **站点内容/记录相关改动去 CF**：`vasantlong.de5.net` 这个 zone（灰云，不要开橙云——橙云会让 Pages 证书签发失败，且多一次可能被污染的边缘解析）
 - **委派本身要改才去 DNSHE**：那 2 条 NS 记录
 - `lexigraph.de5.net`：CF 里另有一个它的子域 zone（旧 wordnet 站），与本博客无关；若不再恢复 wordnet，建议把它的 A 记录/zone 清掉，避免指着一台已释放的机器
@@ -54,14 +55,14 @@ hugo server -D                 # http://127.0.0.1:1313，-D 让草稿也显示
 
 常用 front matter：
 
-| 字段 | 作用 |
-|---|---|
-| `title` / `date` | 标题、发布日（`date` 在未来且 `buildFuture=false` 时**不会构建**，等于定时发布） |
-| `tags` | 自动生成 `/tags/<tag>/` 归档页 |
-| `summary` | 列表页摘要；不填则截取正文 |
-| `draft` | `true` = 草稿 |
-| `showTableOfContents` | 是否显示目录 |
-| `cover` / `images` | 特色图（写在 front matter，图片放同目录） |
+| 字段                  | 作用                                                                             |
+| --------------------- | -------------------------------------------------------------------------------- |
+| `title` / `date`      | 标题、发布日（`date` 在未来且 `buildFuture=false` 时**不会构建**，等于定时发布） |
+| `tags`                | 自动生成 `/tags/<tag>/` 归档页                                                   |
+| `summary`             | 列表页摘要；不填则截取正文                                                       |
+| `draft`               | `true` = 草稿                                                                    |
+| `showTableOfContents` | 是否显示目录                                                                     |
+| `cover` / `images`    | 特色图（写在 front matter，图片放同目录）                                        |
 
 图片用 **page bundle**：放在 `content/posts/<slug>/` 里，正文写 `![说明](photo.png)`（同目录相对路径，构建时自动处理）。
 
@@ -106,18 +107,17 @@ curl -s -o /dev/null -w '%{http_code}\n' https://vasantlong.de5.net/posts/my-slu
 
 > 定时 `Security checks` 在仓库连续 **60 天无活动**后会被 GitHub 自动停用；正常写文章就够保持活跃，长期不写记得手动 `workflow_dispatch` 唤醒一次。
 
-
 ## 首次上线的完整流程（留档，换域名时复用）
 
-| # | 执行位置 | 动作 | 判据 |
-|---|---|---|---|
-| 1 | 浏览器 | `github.com/new` 建仓 `VasantLong/blog`（Public，三项初始化都不勾） | 仓库有 quick setup 页 |
-| 2 | 本机 | `git remote add origin git@github.com:VasantLong/blog.git && git push -u origin main` | push 成功 |
-| 3 | API/浏览器 | 开 Pages：`POST /repos/{o}/{r}/pages` body `{"build_type":"workflow"}` | 返回 201，`build_type=workflow` |
-| 4 | — | 等 Actions 首跑；失败看 `GET /repos/{o}/{r}/actions/runs` | build + deploy 都 success |
-| 5 | CF | 子域 zone `vasantlong.de5.net` 加 4 条 A（Name `@`，灰云） | `dig +short vasantlong.de5.net A` 出 4 个 IP |
-| 6 | API | **先** `PUT /repos/{o}/{r}/pages` body `{"cname":"vasantlong.de5.net"}` | 204 |
-| 7 | API | 轮询 `pages.https_certificate.state` 到 `approved`，**再** `PUT` body `{"https_enforced":true}` | 204，`https_enforced=true` |
+| #   | 执行位置   | 动作                                                                                            | 判据                                         |
+| --- | ---------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| 1   | 浏览器     | `github.com/new` 建仓 `VasantLong/blog`（Public，三项初始化都不勾）                             | 仓库有 quick setup 页                        |
+| 2   | 本机       | `git remote add origin git@github.com:VasantLong/blog.git && git push -u origin main`           | push 成功                                    |
+| 3   | API/浏览器 | 开 Pages：`POST /repos/{o}/{r}/pages` body `{"build_type":"workflow"}`                          | 返回 201，`build_type=workflow`              |
+| 4   | —          | 等 Actions 首跑；失败看 `GET /repos/{o}/{r}/actions/runs`                                       | build + deploy 都 success                    |
+| 5   | CF         | 子域 zone `vasantlong.de5.net` 加 4 条 A（Name `@`，灰云）                                      | `dig +short vasantlong.de5.net A` 出 4 个 IP |
+| 6   | API        | **先** `PUT /repos/{o}/{r}/pages` body `{"cname":"vasantlong.de5.net"}`                         | 204                                          |
+| 7   | API        | 轮询 `pages.https_certificate.state` 到 `approved`，**再** `PUT` body `{"https_enforced":true}` | 204，`https_enforced=true`                   |
 
 > **坑**：第 6 步不要同时塞 `https_enforced: true`，否则报 404 `The certificate does not exist yet`（cert 还没签，API 拒绝）。必须 cname → cert approved → enforce 三步走。
 
@@ -172,8 +172,6 @@ GitHub Pages **不下发自定义响应头** → 没有 HSTS / CSP / X-Content-T
 - ~~`_dmarc.de5.net`~~ **作废**：父域在服务商手里，我们只能管 `vasantlong.de5.net` 这个名字
 - ~~DNSSEC~~ **作废**：父域不给我们放 DS，子域开 DNSSEC 无法形成信任链
 - 共享父域带来的固有风险（记录在案，不可修）：同区其他用户的名字与本站在同一父域下，无法影响彼此的 cookie/声誉；本站不设 cookie、无表单，因此无跨子域数据暴露面
-
-
 
 ## 取舍记录
 
