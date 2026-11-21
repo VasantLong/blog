@@ -43,3 +43,15 @@ scripts/              dev.sh / new-post.sh / security-check.sh / update-theme.sh
 docs/                 operational docs (Chinese) and ADRs
 CONTEXT.md            domain glossary; AGENTS.md holds the rules for AI contributors
 ```
+
+## License
+
+Three scopes, deliberately different:
+
+| Scope                                                                          | License                                                                                                |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| `content/` — the articles                                                      | [CC BY-NC-SA 4.0](LICENSE-CONTENT): reuse and adaptation with attribution, non-commercial, share-alike |
+| everything else — scripts, config, docs, workflows, `hugo.toml`, `archetypes/` | [MIT](LICENSE)                                                                                         |
+| `themes/blowfish/` — vendored upstream theme                                   | upstream MIT, © 2022 Nuno Coração; governed by its own license, see [NOTICE](NOTICE)                   |
+
+Because the root license is MIT while the content is not, GitHub labels the repository "View license" instead of a single identifier. That is the expected result of a split code/content license, not a misconfiguration. Do not delete `themes/blowfish/LICENSE`: it is the theme's own MIT grant and must be preserved across upgrades.

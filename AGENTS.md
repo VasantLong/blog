@@ -24,6 +24,7 @@ scripts/update-theme.sh v3.10.0                 # 换主题版本
 - **不在 `de5.net` 父域上做任何配置**：`de5.net` 是 DNSHE 免费子域服务，我们只有 `vasantlong` / `lexigraph` 两个名字的权限；父域 `_dmarc`/CAA/DNSSEC 一律改不了。
 - **不给 Pages 开 Cloudflare 橙云**：会让自定义域名校验与证书签发失败。记录永远是灰云 + A 直指 `185.199.108-111.153`。
 - 直推 `main` 合规（分支保护只禁 force-push / 删除）；commit 用 `type(scope): English (中文关键词)`。
+- **新增文件要落在正确的许可范围**：`content/` 下是 CC BY-NC-SA 4.0（`LICENSE-CONTENT`），其余是 MIT（`LICENSE`）；`themes/blowfish/` 保留上游 MIT，别删它自带的 `LICENSE`。理由与边界见 `NOTICE`、`docs/decisions.md`。
 
 ## 会再踩的坑
 

@@ -41,3 +41,15 @@ scripts/              dev.sh / new-post.sh / security-check.sh / update-theme.sh
 docs/                 运维文档（中文）与 ADR
 CONTEXT.md            领域术语；AGENTS.md 是 AI 贡献者规则
 ```
+
+## 许可证
+
+三个范围，刻意分开：
+
+| 范围                                                               | 许可                                                                             |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
+| `content/` —— 文章正文                                             | [CC BY-NC-SA 4.0](LICENSE-CONTENT)：可转载、可改编，需署名、非商用、相同方式共享 |
+| 其余全部 —— 脚本、配置、文档、workflow、`hugo.toml`、`archetypes/` | [MIT](LICENSE)                                                                   |
+| `themes/blowfish/` —— vendored 的上游主题                          | 上游 MIT，© 2022 Nuno Coração；遵循其自带许可，见 [NOTICE](NOTICE)               |
+
+根许可是 MIT、内容不是，因此 GitHub 仓库页头会显示 "View license" 而不是单一标识——这是代码/内容分许可的正常结果，不是配置错。别删 `themes/blowfish/LICENSE`：那是主题自身的 MIT 授权，每次升级都要保留。
