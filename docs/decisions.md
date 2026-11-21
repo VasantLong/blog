@@ -2,7 +2,7 @@
 
 跨模块、有明确代价的结构性取舍记在这里。单条决策被翻案、且需要论证备选方案时，才升级成 `docs/adr/NNNN-*.md`（花园站的两条架构决策已是 ADR）。
 
-← 返回 [README](../README.md)
+← 返回 [README](../README.zh-CN.md)，英文版见 [README.md](../README.md)
 
 - **DNS 走子域委派而不是 DNSHE 直连 A 记录**：`de5.net` 整域在 DNSHE，但 DNS 希望在 Cloudflare 统一管（与旧 `lexigraph` 一致）。代价：多一层 NS 委派 + 多一个 CF zone 维护。收益：以后加记录/换目标都在 CF 一个界面。
 - **灰云（DNS only）不是可选项而是硬要求**：橙云时 Pages 的 Let's Encrypt 校验会失败，且 CF 边缘在国内实测半通。

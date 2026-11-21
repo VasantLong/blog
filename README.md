@@ -1,41 +1,45 @@
 # blog
 
-个人博客：**Hugo + Blowfish** → **GitHub Actions** 构建 → **GitHub Pages** → 域名 **<https://vasantlong.de5.net>**
+[English](README.md) | [简体中文](README.zh-CN.md)
 
-状态（2026-10-19）：已上线。Actions run #1 build/deploy 双绿，证书 `CN=vasantlong.de5.net`（Let's Encrypt，至 2027-01-17），`http → https` 301，Enforce HTTPS 已开。
+Personal blog — **Hugo + Blowfish** → built by **GitHub Actions** → served by **GitHub Pages** at **<https://vasantlong.de5.net>**
 
-## 快速开始
+Status (2026-10-19): live. Actions run #1 green on both build and deploy; certificate `CN=vasantlong.de5.net` (Let's Encrypt, valid until 2027-01-17); `http → https` 301; Enforce HTTPS on.
+
+## Quick start
 
 ```bash
-scripts/new-post.sh my-slug "文章标题" "tag1,tag2"   # 起稿（slug 决定 URL）
-hugo server -D                                      # 本地预览，草稿也显示
+scripts/new-post.sh my-slug "Post title" "tag1,tag2"   # scaffold a post (slug becomes the URL)
+hugo server -D                                         # preview at 127.0.0.1:1313, drafts included
 ```
 
-发一篇文章的完整路径见 [`docs/writing.md`](docs/writing.md)。
+The full path from scaffold to live is in [`docs/writing.md`](docs/writing.md).
 
-## 文档地图
+## Documentation map
 
-| 文档 | 回答什么问题 |
-| --- | --- |
-| [`docs/writing.md`](docs/writing.md) | 怎么发一篇文章：建稿、front matter、page bundle、KaTeX、发布与 3 条验证 |
-| [`docs/infrastructure.md`](docs/infrastructure.md) | DNS 拓扑、CF 与 DNSHE 各改什么、父域边界、托管侧行为 |
-| [`docs/initial-deploy.md`](docs/initial-deploy.md) | 首次上线 / 换域名的 7 步流程，以及 Enforce HTTPS 的坑 |
-| [`docs/operations.md`](docs/operations.md) | 巡检验收命令、主题升级、workflow 维护 |
-| [`docs/security.md`](docs/security.md) | 已开的安全项、Pages 结构性限制、账号与 DNS 侧待办 |
-| [`docs/decisions.md`](docs/decisions.md) | 取舍记录（DNS 委派、灰云、vendored 主题…） |
-| [`CONTEXT.md`](CONTEXT.md) | 领域术语：博客与花园的分工、发布态词汇 |
-| [`docs/adr/`](docs/adr/) | 架构决策：花园独立成站、花园只从专用 vault 出 |
-| [`AGENTS.md`](AGENTS.md) | AI 贡献者规则手册（不读就会犯错的那几条） |
+| Document                                           | Answers                                                                                                       |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| [`docs/writing.md`](docs/writing.md)               | How to publish a post: scaffolding, front matter, page bundles, KaTeX, release, the three verification checks |
+| [`docs/infrastructure.md`](docs/infrastructure.md) | DNS topology, what to change in Cloudflare vs. DNSHE, parent-domain limits, hosting behaviour                 |
+| [`docs/initial-deploy.md`](docs/initial-deploy.md) | The 7-step first deploy (reusable when changing domains) and the Enforce HTTPS trap                           |
+| [`docs/operations.md`](docs/operations.md)         | Acceptance commands, theme upgrade, workflow upkeep                                                           |
+| [`docs/security.md`](docs/security.md)             | Enabled security controls, Pages structural limits, account/DNS follow-ups                                    |
+| [`docs/decisions.md`](docs/decisions.md)           | Trade-offs: DNS delegation, the grey-cloud requirement, vendored theme, …                                     |
+| [`CONTEXT.md`](CONTEXT.md)                         | Domain glossary: blog vs. garden, publication states                                                          |
+| [`docs/adr/`](docs/adr/)                           | Architecture decisions: garden as a separate site, garden fed by a dedicated vault                            |
+| [`AGENTS.md`](AGENTS.md)                           | Rule sheet for AI contributors                                                                                |
 
-## 仓库结构
+Operational docs (`docs/*.md`, `CONTEXT.md`, `AGENTS.md`) are **Chinese-only** — this README and [`README.zh-CN.md`](README.zh-CN.md) are the bilingual pair. The Chinese README plus the Chinese docs are authoritative; this page is a translation of it.
+
+## Repository layout
 
 ```text
-config/_default/      params.toml / markup.toml / languages.zh-cn.toml / menus.zh-cn.toml（站点主配置在根 hugo.toml）
-content/              _index.md(首页) / about/ / posts/<slug>/index.md
-static/CNAME          vasantlong.de5.net（Pages 自定义域名，产物里必须有）
-themes/blowfish/      主题 v3.9.0，**裁剪后 vendored**（非 submodule），见 scripts/update-theme.sh
+config/_default/      params.toml / markup.toml / languages.zh-cn.toml / menus.zh-cn.toml (site config lives in hugo.toml)
+content/              _index.md (home) / about/ / posts/<slug>/index.md
+static/CNAME          vasantlong.de5.net — must be present in the build output
+themes/blowfish/      theme v3.9.0, vendored and trimmed (not a submodule) — see scripts/update-theme.sh
 scripts/              dev.sh / new-post.sh / security-check.sh / update-theme.sh
-.github/workflows/    pages.yml（构建 + 部署）、security.yml（12 项不变量自检）
-docs/                 运维文档（中文）与 ADR
-CONTEXT.md            领域术语；AGENTS.md 是 AI 贡献者规则
+.github/workflows/    pages.yml (build + deploy), security.yml (12 invariant checks)
+docs/                 operational docs (Chinese) and ADRs
+CONTEXT.md            domain glossary; AGENTS.md holds the rules for AI contributors
 ```
