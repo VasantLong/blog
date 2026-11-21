@@ -3,6 +3,10 @@ name: Security checks
 on:
   push:
     branches: [main]
+  # PR 上也跑：本地构建产物那几项（CNAME / 404 / 第三方资源 / SRI）是分支相关的，
+  # 线上那几项（首页、跳转、证书、DNS）检查的是生产，PR 里看到的是「当前生产健康」
+  pull_request:
+    branches: [main]
   schedule:
     - cron: '17 22 * * *' # 每天 22:17 UTC = 次日 06:17 北京时间
   workflow_dispatch:
@@ -11,17 +15,22 @@ permissions:
   contents: read
 
 concurrency:
-  group: security-checks
+  group: security-checks-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   checks:
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     env:
       TZ: Asia/Shanghai
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false # 本 workflow 不 push，别把 GITHUB_TOKEN 留在 .git/config
 
       - name: Setup Hugo (extended)
         uses: peaceiris/actions-hugo@2752ce1d29631191ea3f27c23495fa06139a5b78 # v3

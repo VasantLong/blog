@@ -32,5 +32,8 @@ git diff --stat themes/blowfish | tail -3
 
 ## Workflow 维护
 
+- 两条 workflow 都在 **push 到 main 与 pull_request 到 main** 时跑：PR 上 `pages.yml` 只构建、不部署，`security.yml` 跑同一套检查（线上那几项检查的是生产，本地产物那几项才是分支相关的）。
+- `pages.yml` 的 `deploy` job 上挂着 `if: github.event_name != 'pull_request'`，**删了它 PR 就会去部署生产**；两个 job 各有 fork 守卫（`pull_request.head.repo.full_name == github.repository`），fork PR 拿不到 `pages`/`id-token` 权限，跑了只会红。
+- `concurrency` 按 ref 分组（`pages-${{ github.ref }}`），PR 之间互不阻塞，main 仍串行。
 - 定时 `Security checks` 在仓库连续 **60 天无活动**后会被 GitHub 自动停用；正常写文章就够保持活跃，长期不写记得手动 `workflow_dispatch` 唤醒一次。
 - 改 Hugo 版本要两处一起改：`pages.yml` 的 `HUGO_VERSION` 与 `with.hugo-version`。
