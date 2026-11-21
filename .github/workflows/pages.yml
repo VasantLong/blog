@@ -3,6 +3,9 @@ name: Deploy Hugo site to Pages
 on:
   push:
     branches: [main]
+  # PR 上只验证「能不能构建」，部署被下面的 if 挡住；fork PR 连 build 都跳过
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -11,7 +14,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  # 每个 ref 各自排队：PR 之间互不阻塞，main 仍串行（不取消进行中的部署）
+  group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 defaults:
@@ -20,6 +24,10 @@ defaults:
 
 jobs:
   build:
+    # fork PR 拿不到 pages/id-token 权限，跑了只会红；同仓 PR 正常构建当门禁
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     env:
       HUGO_VERSION: 0.168.0
@@ -27,6 +35,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false # 本 workflow 不 push，别把 GITHUB_TOKEN 留在 .git/config
 
       - name: Setup Hugo (extended)
         uses: peaceiris/actions-hugo@2752ce1d29631191ea3f27c23495fa06139a5b78 # v3
@@ -34,19 +44,24 @@ jobs:
           hugo-version: '0.168.0'
           extended: true
 
+      # baseURL 来自仓根 hugo.toml，PR 构建不需要 Pages 的上下文
       - name: Configure Pages
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
 
       - name: Build
         run: hugo --minify --gc --logLevel info
 
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: ./public
 
   deploy:
     needs: build
+    # 只有 push 到 main / 手动触发才部署；PR 永远不碰生产
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

@@ -32,6 +32,7 @@ scripts/update-theme.sh v3.10.0                 # 换主题版本
 - **Pages REST 开 Enforce HTTPS 要分三步**：先 `PUT {cname}` → 轮询 `https_certificate.state == approved` → 再 `PUT {https_enforced:true}`。合并成一次会 404 `The certificate does not exist yet`。
 - **openssl 3.x 输出 `CN = host`（等号带空格）**，1.x 是 `CN=host`；解析证书主题必须先去空白。`security-check.sh` 已处理。
 - **GitHub 定时 workflow 在仓库 60 天无活动后自动停用**，长期不写文章要手动 `workflow_dispatch` 唤醒。
+- **PR 也会跑两条 workflow**：`pages.yml` 在 PR 上只 build、不 deploy（靠 `deploy` job 的 `if: github.event_name != 'pull_request'` 挡住），`security.yml` 在 PR 上跑同一套检查。改触发器/条件时别把这层门禁弄丢——单个失误就是 PR 直接发布到生产。
 - 本机 `github.com:443` 不通（`git clone` 会超时），下载 GitHub 资源走 `codeload.github.com` 或 `api.github.com` 的 asset 端点，详见 kb `infrastructure/minihub-pi-部署.md` 出网矩阵。
 
 ## 站点能力边界
