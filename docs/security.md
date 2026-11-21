@@ -1,6 +1,6 @@
 # 安全基线（2026-10-19 审查）
 
-← 返回 [README](../README.md)
+← 返回 [README](../README.zh-CN.md)，英文版见 [README.md](../README.md)
 
 ## 已开
 

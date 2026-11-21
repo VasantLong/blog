@@ -1,6 +1,6 @@
 # 运维：验收、主题升级、workflow 维护
 
-← 返回 [README](../README.md)
+← 返回 [README](../README.zh-CN.md)，英文版见 [README.md](../README.md)
 
 ## 验收（可随时重跑）
 

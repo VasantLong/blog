@@ -1,6 +1,6 @@
 # 托管与 DNS
 
-线上由 GitHub Pages 提供，域名与 DNS 记录在 Cloudflare，父域在 DNSHE。← 返回 [README](../README.md)
+线上由 GitHub Pages 提供，域名与 DNS 记录在 Cloudflare，父域在 DNSHE。← 返回 [README](../README.zh-CN.md)，英文版见 [README.md](../README.md)
 
 ## DNS 拓扑（改之前先看懂这张图）
 

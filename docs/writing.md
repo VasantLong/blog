@@ -1,6 +1,6 @@
 # 写作与发布
 
-一篇文章从建稿到线上的完整路径。← 返回 [README](../README.md)
+一篇文章从建稿到线上的完整路径。← 返回 [README](../README.zh-CN.md)，英文版见 [README.md](../README.md)
 
 Hugo 已装在 `~/.local/bin/hugo`（v0.168.0 extended，PATH 里可直接用）；CI 用的是同一个版本号。
 
