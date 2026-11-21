@@ -16,8 +16,11 @@ instead of being declared as a submodule, because `github.com:443` is not
 reachable from the build machine and `codeload.github.com` is.
 
 The copy was **trimmed only**: `scripts/update-theme.sh` removes material that
-this site does not build (example site, images, theme documentation, release
-tooling). No theme source file is edited by hand — site-level customisation
+this site does not build — `exampleSite/`, `images/`, theme documentation,
+GitHub/CI metadata, and the theme's own npm tooling under
+`themes/blowfish/scripts/` (Firebase seeding scripts with a separate
+dependency tree; removing it also keeps dependency scanners away from a
+directory Hugo never builds). No theme source file is edited by hand — site-level customisation
 belongs in this repository's own `config/` (and `layouts/` or `assets/`, if
 ever added). Re-running `scripts/update-theme.sh` replaces the whole directory.
 

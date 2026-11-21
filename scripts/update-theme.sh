@@ -19,7 +19,9 @@ tar -xzf "$TMP/theme.tgz" -C "$TMP"
 SRC="$TMP/blowfish-${VER#v}"
 
 # 裁剪：只留运行必需（exampleSite/images 占 ~110MB，文档站专用）
-rm -rf "$SRC"/{exampleSite,images,.github,.claude,.claude-plugin,node_modules}
+# scripts/ 是主题自带的 Firebase 播种脚本（自己的 npm 依赖树），Hugo 不构建它；
+# 留着只会让 Dependabot 去扫一份用不到的 package-lock.json
+rm -rf "$SRC"/{exampleSite,images,scripts,.github,.claude,.claude-plugin,node_modules}
 rm -f "$SRC"/{package.json,package-lock.json,tailwind.config.js,lighthouserc.js,netlify.toml,config.toml,go.mod}
 rm -f "$SRC"/{findMissingTranslations.js,genArticle.js,genLang.js,genLangLinks.js,processUsers.js,update-github-data.sh,FUNDING.yml,CLAUDE.md,CONTRIBUTING.md}
 rm -f "$SRC"/README.*.md
