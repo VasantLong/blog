@@ -1,7 +1,7 @@
 # blog — AGENTS.md
 
 Hugo + Blowfish → GitHub Actions → GitHub Pages → <https://vasantlong.de5.net>。
-**唯一权威文档是本仓 `README.md`**（DNS 拓扑、上线 runbook、验收命令、取舍记录都在里面）。本文件只写「不读就会犯错」的规则。
+**文档地图见本仓 `README.md`**：写作流程、DNS 拓扑、上线 runbook、验收命令、安全基线、取舍记录分别在 `docs/*.md`。本文件只写「不读就会犯错」的规则。
 
 ## 命令速查
 
@@ -36,4 +36,4 @@ scripts/update-theme.sh v3.10.0                 # 换主题版本
 ## 站点能力边界
 
 - 没有安全响应头（HSTS/CSP/XCTO/Referrer-Policy）——GitHub Pages 不下发自定义头，这是产品限制，不是配置漏项。别去加 meta 假装解决。
-- 无 cookie、无表单、无第三方运行时资源，这是刻意的攻击面控制；加评论/统计前先回到本仓 README「安全基线」评估。
+- 无 cookie、无表单、无第三方运行时资源，这是刻意的攻击面控制；加评论/统计前先回到 `docs/security.md` 评估。
