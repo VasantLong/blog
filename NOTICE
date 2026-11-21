@@ -1,0 +1,27 @@
+This repository contains work under more than one license.
+
+## Scope
+
+| Path | License |
+| --- | --- |
+| `content/` | CC BY-NC-SA 4.0 — see `LICENSE-CONTENT` |
+| everything else (scripts, config, docs, workflows, Markdown) | MIT — see `LICENSE` |
+| `themes/blowfish/` | third-party MIT (below) — **not** covered by the root `LICENSE` |
+
+## Blowfish theme
+
+`themes/blowfish/` is a copy of Blowfish v3.9.0
+(<https://github.com/nunocoracao/blowfish>), vendored into this repository
+instead of being declared as a submodule, because `github.com:443` is not
+reachable from the build machine and `codeload.github.com` is.
+
+The copy was **trimmed only**: `scripts/update-theme.sh` removes material that
+this site does not build (example site, images, theme documentation, release
+tooling). No theme source file is edited by hand — site-level customisation
+belongs in this repository's own `config/` (and `layouts/` or `assets/`, if
+ever added). Re-running `scripts/update-theme.sh` replaces the whole directory.
+
+Blowfish is licensed under the MIT License, © 2022 Nuno Coração
+(<https://nunocoracao.com>). The full text ships with the copy at
+`themes/blowfish/LICENSE`; it governs that subtree and any redistribution of
+it, and must be preserved.
