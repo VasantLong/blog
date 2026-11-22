@@ -1,0 +1,12 @@
+# 手写补充：主题 i18n 表之外的界面文案（菜单名、作者简介等）。
+# 键是中文原文（文本节点 trim 后的完整内容），值是英文；生成时覆盖表内同名项。
+strings:
+  文章: Posts
+  标签: Tags
+  花园: Garden
+  关于: About
+  写代码，也写点别的: "Code, and other things"
+  记录工程实践、工具链与踩过的坑。: "Notes on engineering practice, toolchains, and the potholes I hit."
+  # 404 标题：i18n 表里是 "找不到网页 :confused:"，Hugo 渲染时已把短代码变成 emoji，
+  # 浏览器里看到的是带表情的实际文本，所以得按渲染后的样子登记。
+  "找不到网页 😕": "Page Not Found 😕"

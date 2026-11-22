@@ -1,0 +1,8 @@
+{
+  "ignore": [
+    "themes/**",
+    "layouts/**",
+    "public/**",
+    "resources/**"
+  ]
+}

@@ -17,17 +17,18 @@ hugo server -D                                      # 本地预览，草稿也�
 
 ## 文档地图
 
-| 文档                                               | 回答什么问题                                                            |
-| -------------------------------------------------- | ----------------------------------------------------------------------- |
-| [`docs/writing.md`](docs/writing.md)               | 怎么发一篇文章：建稿、front matter、page bundle、KaTeX、发布与 3 条验证 |
-| [`docs/infrastructure.md`](docs/infrastructure.md) | DNS 拓扑、CF 与 DNSHE 各改什么、父域边界、托管侧行为                    |
-| [`docs/initial-deploy.md`](docs/initial-deploy.md) | 首次上线 / 换域名的 7 步流程，以及 Enforce HTTPS 的坑                   |
-| [`docs/operations.md`](docs/operations.md)         | 巡检验收命令、主题升级、workflow 维护                                   |
-| [`docs/security.md`](docs/security.md)             | 已开的安全项、Pages 结构性限制、账号与 DNS 侧待办                       |
-| [`docs/decisions.md`](docs/decisions.md)           | 取舍记录（DNS 委派、灰云、vendored 主题…）                              |
-| [`CONTEXT.md`](CONTEXT.md)                         | 领域术语：博客与花园的分工、发布态词汇                                  |
-| [`docs/adr/`](docs/adr/)                           | 架构决策：花园独立成站、花园只从专用 vault 出                           |
-| [`AGENTS.md`](AGENTS.md)                           | AI 贡献者规则手册（不读就会犯错的那几条）                               |
+| 文档                                               | 回答什么问题                                                                |
+| -------------------------------------------------- | --------------------------------------------------------------------------- |
+| [`docs/writing.md`](docs/writing.md)               | 怎么发一篇文章：建稿、front matter、page bundle、KaTeX、发布与 3 条验证     |
+| [`docs/infrastructure.md`](docs/infrastructure.md) | DNS 拓扑、CF 与 DNSHE 各改什么、父域边界、托管侧行为                        |
+| [`docs/initial-deploy.md`](docs/initial-deploy.md) | 首次上线 / 换域名的 7 步流程，以及 Enforce HTTPS 的坑                       |
+| [`docs/operations.md`](docs/operations.md)         | 巡检验收命令、主题升级、workflow 维护                                       |
+| [`docs/ui-language.md`](docs/ui-language.md)       | 界面双语（单 URL，不生成 `/en/`）：字典怎么生成、站脚、以及刻意不翻译的部分 |
+| [`docs/security.md`](docs/security.md)             | 已开的安全项、Pages 结构性限制、账号与 DNS 侧待办                           |
+| [`docs/decisions.md`](docs/decisions.md)           | 取舍记录（DNS 委派、灰云、vendored 主题…）                                  |
+| [`CONTEXT.md`](CONTEXT.md)                         | 领域术语：博客与花园的分工、发布态词汇                                      |
+| [`docs/adr/`](docs/adr/)                           | 架构决策：花园独立成站、花园只从专用 vault 出                               |
+| [`AGENTS.md`](AGENTS.md)                           | AI 贡献者规则手册（不读就会犯错的那几条）                                   |
 
 ## 仓库结构
 

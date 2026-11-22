@@ -1,0 +1,30 @@
+{{- /* 界面语言层引导：首帧前定 data-ui-lang，避免英文偏好下先闪中文；双语页脚按属性显隐 */ -}}
+<style>
+  html:not([data-ui-lang="en"]) [data-ui-en] {
+    display: none;
+  }
+  html[data-ui-lang="en"] [data-ui-zh] {
+    display: none;
+  }
+  .ui-lang-switch button {
+    padding: 0 0.4rem;
+    line-height: 1.5rem;
+    border-radius: 0.375rem;
+    color: inherit;
+    opacity: 0.55;
+  }
+  .ui-lang-switch button[aria-pressed="true"] {
+    opacity: 1;
+    font-weight: 600;
+    background-color: rgb(127 127 127 / 0.18);
+  }
+</style>
+<script>
+  (function () {
+    var lang = "zh";
+    try {
+      if (localStorage.getItem("uiLang") === "en") lang = "en";
+    } catch (e) {}
+    document.documentElement.setAttribute("data-ui-lang", lang);
+  })();
+</script>

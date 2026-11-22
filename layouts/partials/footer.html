@@ -1,0 +1,108 @@
+{{- /* 覆盖主题 footer.html：标准站脚。版权一行、许可与构建声明一行、右侧链接。
+       中英双语靠 data-ui-zh / data-ui-en 两个 span + head 里的 CSS 显隐（无 JS 时显示中文）。 */ -}}
+<footer id="site-footer" class="py-10 print:hidden">
+  {{/* Footer menu */}}
+  {{ if .Site.Params.footer.showMenu | default true }}
+    {{ if .Site.Menus.footer }}
+      {{ $onlyIcon := true }}
+      {{ range .Site.Menus.footer }}
+        {{ if .Name }}
+          {{ $onlyIcon = false }}
+          {{ break }}
+        {{ end }}
+      {{ end }}
+      {{ $navClass := printf "flex flex-row pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400 %s" (cond $onlyIcon "overflow-x-auto py-2" "") }}
+      {{ $ulClass := printf "flex list-none %s" (cond $onlyIcon "flex-row" "flex-col sm:flex-row") }}
+      {{ $liClass := printf "flex mb-1 text-end sm:mb-0 sm:me-7 sm:last:me-0 %s" (cond $onlyIcon "me-4" "") }}
+      <nav aria-label="{{ i18n "nav.footer_menu" }}" class="{{ $navClass }}">
+        <ul class="{{ $ulClass }}">
+          {{ range .Site.Menus.footer }}
+            <li class=" {{ $liClass }}">
+              <a
+                class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2 flex items-center"
+                href="{{ .URL }}"
+                title="{{ .Title }}">
+                {{ if .Pre }}
+                  <span {{ if and .Pre .Name }}class="mr-1"{{ end }}>
+                    {{ partial "icon.html" .Pre }}
+                  </span>
+                {{ end }}
+                {{ .Name | markdownify }}
+              </a>
+            </li>
+          {{ end }}
+        </ul>
+      </nav>
+    {{ end }}
+  {{ end }}
+
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <div class="flex flex-col gap-1">
+      {{/* Copyright */}}
+      {{ if .Site.Params.footer.showCopyright | default true }}
+        <p class="text-sm font-medium text-neutral-600 dark:text-neutral-300">
+          &copy; {{ now.Format "2006" }} {{ .Site.Params.Author.name | default .Site.Title }}
+        </p>
+      {{ end }}
+      {{/* 许可与构建声明：与 LICENSE-CONTENT / LICENSE / NOTICE 对齐 */}}
+      <p class="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
+        <span data-ui-zh>
+          除特别注明外，内容以
+          <a
+            class="hover:underline hover:decoration-primary-400"
+            href="https://github.com/VasantLong/blog/blob/main/LICENSE-CONTENT"
+            rel="license noopener noreferrer"
+            target="_blank"
+            >CC BY-NC-SA 4.0</a
+          >
+          发布；站点代码 MIT。由
+          <a class="hover:underline hover:decoration-primary-400" href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a>
+          与
+          <a class="hover:underline hover:decoration-primary-400" href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>
+          构建。
+        </span>
+        <span data-ui-en lang="en">
+          Unless otherwise noted, content is licensed
+          <a
+            class="hover:underline hover:decoration-primary-400"
+            href="https://github.com/VasantLong/blog/blob/main/LICENSE-CONTENT"
+            rel="license noopener noreferrer"
+            target="_blank"
+            >CC BY-NC-SA 4.0</a
+          >; site code is MIT. Built with
+          <a class="hover:underline hover:decoration-primary-400" href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a>
+          and
+          <a class="hover:underline hover:decoration-primary-400" href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>.
+        </span>
+      </p>
+    </div>
+
+    {{/* 标准站脚右列：外链 + 订阅 + 许可 */}}
+    <ul class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-neutral-500 dark:text-neutral-400 sm:justify-end">
+      <li>
+        <a
+          class="hover:underline hover:decoration-primary-400"
+          href="https://github.com/VasantLong"
+          target="_blank"
+          rel="noopener noreferrer me">GitHub</a>
+      </li>
+      <li>
+        <a class="hover:underline hover:decoration-primary-400" href="{{ "index.xml" | relURL }}">RSS</a>
+      </li>
+      <li>
+        <a
+          class="hover:underline hover:decoration-primary-400"
+          href="https://github.com/VasantLong/blog/blob/main/LICENSE-CONTENT"
+          target="_blank"
+          rel="noopener noreferrer">
+          <span data-ui-zh>许可</span><span data-ui-en lang="en">License</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  {{/* Extend footer - eg. for extra scripts, etc. */}}
+  {{ if templates.Exists "partials/extend-footer.html" }}
+    {{ partialCached "extend-footer.html" . }}
+  {{ end }}
+</footer>

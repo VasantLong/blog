@@ -1,0 +1,91 @@
+{
+ "note": "由 scripts/gen-ui-dict.py 生成，勿手改",
+ "patterns": [
+  {
+   "one": "$1 like",
+   "other": "$1 likes",
+   "re": "^(\\d+)\\ 个赞$"
+  },
+  {
+   "one": "$1 min",
+   "other": "$1 mins",
+   "re": "^(\\d+)\\ 分钟$"
+  },
+  {
+   "one": "$1 word",
+   "other": "$1 words",
+   "re": "^(\\d+)\\ 字$"
+  },
+  {
+   "one": "$1 view",
+   "other": "$1 views",
+   "re": "^(\\d+)\\ 次浏览$"
+  },
+  {
+   "en": "Reply to $1",
+   "re": "^回复\\ (.+?)$"
+  },
+  {
+   "en": "Updated: $1",
+   "re": "^更新于:\\ (.+?)$"
+  },
+  {
+   "en": "Powered by $1 &amp; $2",
+   "re": "^由\\ (.+?)\\ \\&amp;\\ (.+?)\\ 强力驱动$"
+  }
+ ],
+ "strings": {
+  "404 错误": "Error 404",
+  "§": "Part",
+  "作者": "Author",
+  "停用阅读模式": "Disable zen mode",
+  "关于": "About",
+  "关闭 (Esc)": "Close (Esc)",
+  "写代码，也写点别的": "Code, and other things",
+  "分享到 Facebook": "Share on Facebook",
+  "分享到 LINE": "Share on LINE",
+  "分享到 LinkedIn": "Share on LinkedIn",
+  "分享到 Twitter": "Tweet on Twitter",
+  "切换为浅色模式": "Switch to light appearance",
+  "切换为深色模式": "Switch to dark appearance",
+  "发布到 Bluesky": "Post on Bluesky",
+  "啟用阅读模式": "Enable zen mode",
+  "复制": "Copy",
+  "字体大小": "Font size",
+  "已复制": "Copied",
+  "您请求的页面似乎不存在。": "It seems that the page you've requested does not exist.",
+  "找不到网页 :confused:": "Page Not Found :confused:",
+  "找不到网页 😕": "Page Not Found 😕",
+  "提交到 Reddit": "Submit to Reddit",
+  "搜索": "Search",
+  "搜索 (/)": "Search (/ or ⌘K)",
+  "文章": "Posts",
+  "无障碍设定": "Accessibility settings",
+  "显示更多": "Show More",
+  "显示链接下划线": "Show link underline",
+  "最近的文章": "Recent",
+  "本文": "This Article",
+  "标签": "Tags",
+  "目录": "Table of Contents",
+  "相关文章": "Related",
+  "禁用模糊效果": "Disable blur",
+  "禁用背景图片": "Disable background image",
+  "简体中文": "EN",
+  "编辑内容": "Edit content",
+  "花园": "Garden",
+  "草稿": "Draft",
+  "记录工程实践、工具链与踩过的坑。": "Notes on engineering practice, toolchains, and the potholes I hit.",
+  "跳过正文": "Skip to main content",
+  "返回顶部": "Scroll to top",
+  "这篇文章属于一个选集。": "This article is part of a series.",
+  "这里还没有任何文章可以列出。": "There are no articles to list here yet.",
+  "通过 Telegram 分享": "Share via Telegram",
+  "通过 WhatsApp 分享": "Share via WhatsApp",
+  "通过电子邮件发送": "Send via email",
+  "通过邮件回复": "Reply by Email",
+  "钉到 Pinterest": "Pin on Pinterest",
+  "链接到外部网站": "Link to external site",
+  "锚点": "Anchor",
+  "预计阅读": "Reading time"
+ }
+}

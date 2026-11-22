@@ -1,0 +1,9 @@
+{{- /* 界面语言层运行时：字典由 scripts/gen-ui-dict.py 生成，内联以省一次请求、避免闪烁 */ -}}
+{{- $dict := resources.Get "data/ui-i18n.json" -}}
+{{- $script := resources.Get "js/ui-lang.js" -}}
+{{- if and $dict $script -}}
+  <script>
+    window.__UI_I18N__ = {{ $dict.Content | safeJS }};
+    {{ $script.Content | safeJS }}
+  </script>
+{{- end -}}

@@ -83,6 +83,27 @@ if [ -d public ]; then
   if [ -z "$extjs$extcss" ]; then ok "运行时无第三方 script/styles（攻击面窄）"; else fail "发现第三方运行时资源: $extjs $extcss"; fi
   integ=$(grep -o 'integrity=' public/index.html 2>/dev/null | wc -l | tr -d ' ')
   [ "${integ:-0}" -ge 1 ] && ok "关键资源带 SRI integrity ($integ 处)" || warn "首页无 integrity 属性"
+  # 界面语言层（UI i18n）：字典、切换脚本、<html data-ui-lang> 引导都必须进产物
+  if grep -q '__UI_I18N__' public/index.html 2>/dev/null && grep -q 'data-ui-lang' public/index.html 2>/dev/null; then
+    ok "界面语言层已注入（字典 + 切换脚本 + 引导）"
+  else
+    fail "界面语言层缺失：查 layouts/partials/extend-head.html 与 extend-footer.html"
+  fi
+  if grep -qE 'data-ui-lang-btn="?en' public/index.html 2>/dev/null; then
+    ok "顶栏含中/EN 切换器"
+  else
+    fail "顶栏缺少中/EN 切换器"
+  fi
+  # 字典是生成物：主题 i18n 表变了而字典没重生成 → 英文界面漏译
+  if python3 -c 'import yaml' 2>/dev/null; then
+    if python3 scripts/gen-ui-dict.py --check >/dev/null 2>&1; then
+      ok "界面字典与主题 i18n 表一致"
+    else
+      fail "界面字典漂移：跑 python3 scripts/gen-ui-dict.py 重新生成"
+    fi
+  else
+    warn "未安装 PyYAML，跳过界面字典漂移检查（本地务必跑 gen-ui-dict.py --check）"
+  fi
 else
   fail "public/ 不存在（先 hugo --minify 构建）"
 fi

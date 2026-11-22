@@ -28,6 +28,11 @@ scripts/update-theme.sh v3.10.0        # 下载 → 裁剪 → 替换 themes/blo
 git diff --stat themes/blowfish | tail -3
 ```
 
+```bash
+python3 scripts/gen-ui-dict.py          # 界面字典是主题 i18n 表的生成物，升级后必须重生成
+python3 scripts/gen-ui-dict.py --check  # 应与 --check 输出一致（security-check.sh 也会调它）
+```
+
 升级后把新版本号写进本文件与 commit message，并同步 [`../README.md`](../README.md)「仓库结构」里的 vX.Y.Z。
 
 ## Workflow 维护

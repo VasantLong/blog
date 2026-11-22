@@ -17,17 +17,18 @@ The full path from scaffold to live is in [`docs/writing.md`](docs/writing.md).
 
 ## Documentation map
 
-| Document                                           | Answers                                                                                                       |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| [`docs/writing.md`](docs/writing.md)               | How to publish a post: scaffolding, front matter, page bundles, KaTeX, release, the three verification checks |
-| [`docs/infrastructure.md`](docs/infrastructure.md) | DNS topology, what to change in Cloudflare vs. DNSHE, parent-domain limits, hosting behaviour                 |
-| [`docs/initial-deploy.md`](docs/initial-deploy.md) | The 7-step first deploy (reusable when changing domains) and the Enforce HTTPS trap                           |
-| [`docs/operations.md`](docs/operations.md)         | Acceptance commands, theme upgrade, workflow upkeep                                                           |
-| [`docs/security.md`](docs/security.md)             | Enabled security controls, Pages structural limits, account/DNS follow-ups                                    |
-| [`docs/decisions.md`](docs/decisions.md)           | Trade-offs: DNS delegation, the grey-cloud requirement, vendored theme, …                                     |
-| [`CONTEXT.md`](CONTEXT.md)                         | Domain glossary: blog vs. garden, publication states                                                          |
-| [`docs/adr/`](docs/adr/)                           | Architecture decisions: garden as a separate site, garden fed by a dedicated vault                            |
-| [`AGENTS.md`](AGENTS.md)                           | Rule sheet for AI contributors                                                                                |
+| Document                                           | Answers                                                                                                                    |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| [`docs/writing.md`](docs/writing.md)               | How to publish a post: scaffolding, front matter, page bundles, KaTeX, release, the three verification checks              |
+| [`docs/infrastructure.md`](docs/infrastructure.md) | DNS topology, what to change in Cloudflare vs. DNSHE, parent-domain limits, hosting behaviour                              |
+| [`docs/initial-deploy.md`](docs/initial-deploy.md) | The 7-step first deploy (reusable when changing domains) and the Enforce HTTPS trap                                        |
+| [`docs/operations.md`](docs/operations.md)         | Acceptance commands, theme upgrade, workflow upkeep                                                                        |
+| [`docs/ui-language.md`](docs/ui-language.md)       | Bilingual UI (single URL, no `/en/`): how the dictionary is generated, the footer, and what is deliberately not translated |
+| [`docs/security.md`](docs/security.md)             | Enabled security controls, Pages structural limits, account/DNS follow-ups                                                 |
+| [`docs/decisions.md`](docs/decisions.md)           | Trade-offs: DNS delegation, the grey-cloud requirement, vendored theme, …                                                  |
+| [`CONTEXT.md`](CONTEXT.md)                         | Domain glossary: blog vs. garden, publication states                                                                       |
+| [`docs/adr/`](docs/adr/)                           | Architecture decisions: garden as a separate site, garden fed by a dedicated vault                                         |
+| [`AGENTS.md`](AGENTS.md)                           | Rule sheet for AI contributors                                                                                             |
 
 Operational docs (`docs/*.md`, `CONTEXT.md`, `AGENTS.md`) are **Chinese-only** — this README and [`README.zh-CN.md`](README.zh-CN.md) are the bilingual pair. The Chinese README plus the Chinese docs are authoritative; this page is a translation of it.
 
