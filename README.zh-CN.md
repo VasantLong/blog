@@ -38,7 +38,7 @@ content/              _index.md(首页) / about/ / posts/<slug>/index.md
 static/CNAME          vasantlong.de5.net（Pages 自定义域名，产物里必须有）
 themes/blowfish/      主题 v3.9.0，**裁剪后 vendored**（非 submodule），见 scripts/update-theme.sh
 scripts/              dev.sh / new-post.sh / security-check.sh / update-theme.sh
-.github/workflows/    pages.yml（构建 + 部署）、security.yml（12 项不变量自检）
+.github/workflows/    pages.yml（构建 + 部署）、security.yml（不变量自检）
 docs/                 运维文档（中文）与 ADR
 CONTEXT.md            领域术语；AGENTS.md 是 AI 贡献者规则
 ```

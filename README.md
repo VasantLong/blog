@@ -40,7 +40,7 @@ content/              _index.md (home) / about/ / posts/<slug>/index.md
 static/CNAME          vasantlong.de5.net — must be present in the build output
 themes/blowfish/      theme v3.9.0, vendored and trimmed (not a submodule) — see scripts/update-theme.sh
 scripts/              dev.sh / new-post.sh / security-check.sh / update-theme.sh
-.github/workflows/    pages.yml (build + deploy), security.yml (12 invariant checks)
+.github/workflows/    pages.yml (build + deploy), security.yml (invariant checks)
 docs/                 operational docs (Chinese) and ADRs
 CONTEXT.md            domain glossary; AGENTS.md holds the rules for AI contributors
 ```

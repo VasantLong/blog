@@ -18,7 +18,7 @@ openssl s_client -connect vasantlong.de5.net:443 -servername vasantlong.de5.net 
 
 2026-10-19 实测：首页 200 / total 0.52s（TLS 建连 0.42s）、CSS 200（131KB）、文章页表格与 KaTeX 正常。
 
-机器可读的那 12 项不变量在 `scripts/security-check.sh`（`security.yml` 每跑同一套）；基线与结构性限制见 [`security.md`](security.md)。
+机器可读的那组不变量在 `scripts/security-check.sh`（条目会随站点能力增减，文档里不记数）（`security.yml` 每跑同一套）；基线与结构性限制见 [`security.md`](security.md)。
 
 ## 主题升级
 

@@ -9,7 +9,7 @@ Hugo + Blowfish → GitHub Actions → GitHub Pages → <https://vasantlong.de5.
 scripts/new-post.sh <slug> "标题" "tag1,tag2"   # 起稿（slug 决定 URL）
 hugo server -D                                  # 本地预览，草稿也显示
 hugo --minify --gc --cleanDestinationDir        # 构建（CI 用同一命令但不带 --cleanDestinationDir）
-bash scripts/security-check.sh                  # 12 项不变量自检
+bash scripts/security-check.sh                  # 不变量自检（条目会增，别在文档里记数）
 scripts/update-theme.sh v3.10.0                 # 换主题版本
 ```
 
