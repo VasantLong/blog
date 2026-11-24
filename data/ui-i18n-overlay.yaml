@@ -3,7 +3,6 @@
 strings:
   文章: Posts
   标签: Tags
-  花园: Garden
   关于: About
   写代码，也写点别的: "Code, and other things"
   记录工程实践、工具链与踩过的坑。: "Notes on engineering practice, toolchains, and the potholes I hit."

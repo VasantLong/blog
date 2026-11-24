@@ -12,7 +12,7 @@ registrar/DNSHE  zone de5.net  (a/b.ns.dnshe.org)      ← de5.net 整域权威�
                  └─ GitHub Pages（构建产物 = .github/workflows/pages.yml 产出的 public/）
 ```
 
-- **菜单里唯一的外部入口是「花园」**（`config/_default/menus.zh-cn.toml`，`url = https://notes.vasantlong.de5.net`）：Blowfish 对 `http(s)` 开头的 `url` 自动加 `target="_blank"`，桌面与手机菜单都生效，主题不用改；两站分工与"花园不引用博客"的例外见 `CONTEXT.md`
+- **菜单里唯一的外部入口是「notes」（花园站）**（`config/_default/menus.zh-cn.toml`，`url = https://notes.vasantlong.de5.net`）：Blowfish 对 `http(s)` 开头的 `url` 自动加 `target="_blank"`，桌面与手机菜单都生效，主题不用改；两站分工与"花园不引用博客"的例外见 `CONTEXT.md`
 - **站点内容/记录相关改动去 CF**：`vasantlong.de5.net` 这个 zone（灰云，不要开橙云——橙云会让 Pages 证书签发失败，且多一次可能被污染的边缘解析）
 - **委派本身要改才去 DNSHE**：那 2 条 NS 记录
 - `lexigraph.de5.net`：CF 里另有一个它的子域 zone（旧 wordnet 站），与本博客无关；若不再恢复 wordnet，建议把它的 A 记录/zone 清掉，避免指着一台已释放的机器

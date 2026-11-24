@@ -10,7 +10,7 @@
   weight = 20
 
 [[main]]
-  name = "花园"
+  name = "notes"
   url = "https://notes.vasantlong.de5.net"
   weight = 25
 
