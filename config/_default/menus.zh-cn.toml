@@ -10,7 +10,7 @@
   weight = 20
 
 [[main]]
-  name = "notes"
+  name = "Notes"
   url = "https://notes.vasantlong.de5.net"
   weight = 25
 
