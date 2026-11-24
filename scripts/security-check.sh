@@ -107,11 +107,14 @@ if [ -d public ]; then
     fail "关于页缺 data-ui-zh / data-ui-en 双语段"
   fi
   # 关于页大标题也要随界面语言走（layouts/about/single.html + frontmatter titleEn）。
-  # minify 后 h1 与里面的 span 可能同行也可能换行，取标题后 300 字符窗口判断。
-  if grep -o '<h1.\{0,300\}' public/about/index.html 2>/dev/null | grep -q 'data-ui-en'; then
+  # minify 保留模板里的换行，<h1> 与内部 span 可能不在同一行 → 用 python3 取 h1 整块再判（grep 单行窗口会误报）。
+  if python3 -c 'import re,sys
+h = open("public/about/index.html", encoding="utf-8").read()
+m = re.search(r"<h1[^>]*>(.*?)</h1>", h, re.S)
+sys.exit(0 if m and "data-ui-zh" in m.group(1) and "data-ui-en" in m.group(1) else 1)' 2>/dev/null; then
     ok "关于页标题中英可切换"
   else
-    fail "关于页 h1 缺 data-ui-en（英文界面下大标题仍是中文）"
+    fail "关于页 h1 缺 data-ui-zh / data-ui-en（英文界面下大标题仍是中文）"
   fi
   # 字典是生成物：主题 i18n 表变了而字典没重生成 → 英文界面漏译
   if python3 -c 'import yaml' 2>/dev/null; then
