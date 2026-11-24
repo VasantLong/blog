@@ -1,5 +1,6 @@
 ---
 title: "关于"
+titleEn: "About"
 date: 2026-10-19
 showDate: false
 showAuthor: false
@@ -9,7 +10,6 @@ showTableOfContents: false
 ---
 
 <div data-ui-zh>
-  <h2>关于</h2>
   <p>
     我是信息管理与信息系统专业的本科生，2027 年秋开始读软件工程硕士。方向还在试——与其先规划，不如先动手做一遍，agent 把这种试错的成本压得很低。
   </p>
@@ -56,7 +56,6 @@ showTableOfContents: false
   </ul>
 </div>
 <div data-ui-en lang="en">
-  <h2>About</h2>
   <p>
     I'm an undergrad in Information Management &amp; Information Systems, starting a master's in Software Engineering in autumn 2027. I'm still working out what to commit to — by trying things rather than planning them, and agents have made that kind of trial and error a lot cheaper.
   </p>

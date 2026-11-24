@@ -1,0 +1,22 @@
+{{- /* 关于页专用布局：与主题 _default/single.html 的差别只有两处——
+       1) <h1> 中英两段（data-ui-zh / data-ui-en），英文界面下显示 titleEn；
+       2) 省掉 hero / TOC / series / 上下篇 / 评论：关于页用不到，也免得跟着主题升级漂移。
+       为什么不用主题的 single.html：标题是写死在模板里的 `{{ "{{" }} .Title | emojify {{ "}}" }}`，没有 partial 接缝，
+       而站点级 `layouts/partials/` 又扫不到 Tailwind（见 docs/ui-language.md），所以只复制渲染路径的最小骨架。 */ -}}
+{{ define "main" }}
+  <article>
+    <header id="single_header" class="mt-5 max-w-prose">
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        <span data-ui-zh>{{ .Title | emojify }}</span><span data-ui-en lang="en">{{ .Params.titleEn | default .Title }}</span>
+      </h1>
+    </header>
+
+    <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+      <div class="min-w-0 min-h-0 max-w-fit">
+        <div class="article-content max-w-prose mb-20">
+          {{ .Content }}
+        </div>
+      </div>
+    </section>
+  </article>
+{{ end }}

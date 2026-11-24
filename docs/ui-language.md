@@ -71,7 +71,8 @@ grep -c 'gap-x-4' public/css/main.bundle.min.*.css   # 0 = 这个类不会生效
 两点约束：
 
 - 两段都要手写成 HTML——goldmark 不解析 raw HTML 块里的 markdown，写进去的 `##` 和 `-` 会原样显示。
-- 标题仍是「关于」（`title` 不参与界面翻译），英文界面下页面标题保持中文，属既定取舍。
+- 大标题走 `layouts/about/single.html`（关于页专用的站点级布局，只保留 header + 正文骨架）：h1 里并列 `<span data-ui-zh>{{ .Title }}>` 与 `<span data-ui-en lang="en">{{ .Params.titleEn | default .Title }}>`，英文界面显示 frontmatter 的 `titleEn: "About"`。为什么另起布局而不改主题：主题 `_default/single.html` 的标题写死在模板里，没有 partial 接缝，而主题模板不可手改（升级会丢）。
+- `<title>` 与 og/description 仍是中文「关于 · Vasant Long」——SEO 元数据不属界面，属既定取舍（见下节）。
 
 ## 明确不做的事
 
