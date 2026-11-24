@@ -94,6 +94,18 @@ if [ -d public ]; then
   else
     fail "顶栏缺少中/EN 切换器"
   fi
+  # content/ 里的 md 不是 Go 模板：写进去的 {{/* ... */}} 会原样渲染到页面上
+  if grep -rq '{{/\*' public --include='*.html' 2>/dev/null; then
+    fail "产物里有未执行的模板注释 {{/* … */}}（内容文件里不能写 Go 模板注释）"
+  else
+    ok "产物里无残留模板注释"
+  fi
+  # 关于页正文是双语唯一例外：两段缺一段，另一种界面语言下正文就整块空白
+  if [ -f public/about/index.html ] && grep -q 'data-ui-zh' public/about/index.html 2>/dev/null && grep -q 'data-ui-en' public/about/index.html 2>/dev/null; then
+    ok "关于页中英两段齐全"
+  else
+    fail "关于页缺 data-ui-zh / data-ui-en 双语段"
+  fi
   # 字典是生成物：主题 i18n 表变了而字典没重生成 → 英文界面漏译
   if python3 -c 'import yaml' 2>/dev/null; then
     if python3 scripts/gen-ui-dict.py --check >/dev/null 2>&1; then

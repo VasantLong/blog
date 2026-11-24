@@ -50,9 +50,32 @@ python3 scripts/gen-ui-dict.py --check   # 只比对，漂移则 exit 1（securi
 
 刻意不写 `All rights reserved`：正文是 CC BY-NC-SA 4.0、代码是 MIT，保留所有权利与这两张许可自相矛盾。
 
+右列间距、顶栏切换器与搜索框之间的间距都写在 `extend-head.html` 的原生 CSS 里（`.site-footer-links`、`.ui-lang-switch`），**不用 Tailwind utility**。
+
+## 别在站点模板里用新的 Tailwind 类
+
+Blowfish 的 Tailwind 只扫主题源码，站点级 `layouts/partials/` 里新写的类不会进 `public/css/main.bundle.min.*.css`——能用的只有主题自己也用到的那些。实测踩过的坑：`gap-x-4` / `gap-y-1` / `ms-1` / `me-7` / `p-0.5` / `sm:justify-end` 在产物里计数为 0，页面照常渲染但间距全丢，且不报任何错。
+
+判定方法：
+
+```bash
+grep -c 'gap-x-4' public/css/main.bundle.min.*.css   # 0 = 这个类不会生效
+```
+
+需要站点独有的排版时，写进 `extend-head.html` 的 `<style>`（那段是手写 CSS，不经过 Tailwind，永远生效），或在 `assets/` 里加站点 CSS。
+
+## 关于页
+
+`content/about/index.md` 是**正文双语**的唯一例外：它的两段正文用 `<div data-ui-zh>` / `<div data-ui-en lang="en">` 并排写，靠 `extend-head.html` 的属性选择器显隐（无 JS 时显示中文），而 `ui-lang.js` 的 `SKIP` 含 `.article-content`，不会去翻译它们。
+
+两点约束：
+
+- 两段都要手写成 HTML——goldmark 不解析 raw HTML 块里的 markdown，写进去的 `##` 和 `-` 会原样显示。
+- 标题仍是「关于」（`title` 不参与界面翻译），英文界面下页面标题保持中文，属既定取舍。
+
 ## 明确不做的事
 
-- **正文、文章标题、摘要、标签名不翻译。**
+- **正文、文章标题、摘要、标签名不翻译。**唯一例外是「关于」页（见上），它写死了中英两段。
 - **`<html lang>` 不随界面语言改**：正文是中文，改成 `en` 会让屏幕阅读器用英文音库念中文。代价是英文界面下 `lang` 不精确（已知取舍）。
 - **SEO 元数据（`<title>`、`description`、og:）保持中文**：它们是内容的镜像，不属界面。
 - **404 页的随机格言不翻译**（`themes/blowfish/data/quotes404.json`，纯装饰）。
