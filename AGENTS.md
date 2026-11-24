@@ -24,11 +24,14 @@ scripts/update-theme.sh v3.10.0                 # 换主题版本
 - **不在 `de5.net` 父域上做任何配置**：`de5.net` 是 DNSHE 免费子域服务，我们只有 `vasantlong` / `lexigraph` 两个名字的权限；父域 `_dmarc`/CAA/DNSSEC 一律改不了。
 - **不给 Pages 开 Cloudflare 橙云**：会让自定义域名校验与证书签发失败。记录永远是灰云 + A 直指 `185.199.108-111.153`。
 - 直推 `main` 合规（分支保护只禁 force-push / 删除）；commit 用 `type(scope): English (中文关键词)`。
+- **站点级 `layouts/` 里新写的 Tailwind 类不生效**：主题的 Tailwind 只扫 `themes/blowfish/`，站点 override 里的新 utility 类不进 `public/css/main.bundle.min.*.css`（页面照常渲染，间距静默丢失）；站点自有排版写进 `layouts/partials/extend-head.html` 的手写 CSS，详见 `docs/ui-language.md`。
+- **关于页大标题由 `layouts/about/single.html` + frontmatter `titleEn` 生成**：正文只写中英两段 HTML，别再手写 `<h2>关于</h2>` 这类语言标题（`security-check.sh` 会判红）。
 - **界面字典是生成物**：`assets/data/ui-i18n.json` 由 `scripts/gen-ui-dict.py` 从 `themes/blowfish/i18n/{zh-CN,en}.yaml` 生成，**不手改**；主题升级或改界面文案后必须重跑（手写补充进 `data/ui-i18n-overlay.yaml`），`--check` 漂移会被 `security-check.sh` 判红。正文/文章标题/summary 永不进字典（详情 `docs/ui-language.md`）。
 - **新增文件要落在正确的许可范围**：`content/` 下是 CC BY-NC-SA 4.0（`LICENSE-CONTENT`），其余是 MIT（`LICENSE`）；`themes/blowfish/` 保留上游 MIT，别删它自带的 `LICENSE`。理由与边界见 `NOTICE`、`docs/decisions.md`。
 
 ## 会再踩的坑
 
+- **文章正文不是 Go 模板**：`content/*.md` 里的 `{{/* … */}}` 不会剥离，会原样显示在页面上（正文只认短代码调用）；注释只写在模板文件里，`security-check.sh` 有「产物无残留模板注释」不变量。
 - **删/改文章后本地构建必须加 `--cleanDestinationDir`**，否则 `public/` 留僵尸页（本地预览仍能看到已删文章）。CI 全新 checkout 不受影响。
 - **Pages REST 开 Enforce HTTPS 要分三步**：先 `PUT {cname}` → 轮询 `https_certificate.state == approved` → 再 `PUT {https_enforced:true}`。合并成一次会 404 `The certificate does not exist yet`。
 - **openssl 3.x 输出 `CN = host`（等号带空格）**，1.x 是 `CN=host`；解析证书主题必须先去空白。`security-check.sh` 已处理。

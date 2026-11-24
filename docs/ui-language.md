@@ -86,7 +86,7 @@ grep -c 'gap-x-4' public/css/main.bundle.min.*.css   # 0 = 这个类不会生效
 
 ```bash
 hugo --minify --gc --cleanDestinationDir
-bash scripts/security-check.sh          # 含「界面语言层已注入」「顶栏含切换器」「字典无漂移」三项
+bash scripts/security-check.sh          # 含界面语言层、顶栏切换器、关于页中英两段、产物无残留模板注释、字典无漂移
 ```
 
 浏览器里点一下顶栏 `EN`：导航/页脚/TOC/搜索框应转英文，正文与文章标题必须保持原样；刷新后仍是英文（`localStorage.uiLang=en`）；点 `中` 完全还原。
